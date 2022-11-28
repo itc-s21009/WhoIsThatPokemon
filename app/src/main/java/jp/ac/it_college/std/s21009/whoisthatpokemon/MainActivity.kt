@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         title = getString(R.string.app_name)
         setContentView(binding.root)
+        initJsonData(assets)
         binding.btSelectGeneration.setOnClickListener {
             startActivity(Intent(this, SelectGenerationActivity::class.java))
         }
