@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import jp.ac.it_college.std.s21009.whoisthatpokemon.databinding.ActivitySelectGenerationBinding
-import jp.ac.it_college.std.s21009.whoisthatpokemon.model.pokedex.PokedexJson
+import jp.ac.it_college.std.s21009.whoisthatpokemon.model.PokedexJson
 
 class SelectGenerationActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySelectGenerationBinding
