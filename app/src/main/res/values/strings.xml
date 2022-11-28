@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WhoIsThatPokemon</string>
+    <string name="title">ポケモンだーれだ</string>
+    <string name="select_generation">世代選択</string>
+</resources>
