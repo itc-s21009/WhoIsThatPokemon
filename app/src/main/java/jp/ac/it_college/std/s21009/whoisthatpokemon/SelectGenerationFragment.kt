@@ -26,10 +26,11 @@ class SelectGenerationFragment : Fragment() {
         pokedex.forEach { g ->
             val button = Button(activity).apply { text = g.name }
             button.setOnClickListener {
-                Navigation.findNavController(it).navigate(R.id.quizFragment,
-                    Bundle().apply {
-                        putIntArray("pokemonIdList", g.entries.map { e -> e.pokemon_id }.toIntArray())
-                    })
+                Navigation.findNavController(it).navigate(
+                    SelectGenerationFragmentDirections.selectToQuiz(
+                        g.entries.map { e -> e.pokemon_id }.toIntArray()
+                    )
+                )
             }
             binding.generations.addView(button)
         }

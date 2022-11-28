@@ -20,12 +20,16 @@
         android:label="fragment_select_generation"
         tools:layout="@layout/fragment_select_generation" >
         <action
-            android:id="@+id/action_selectGenerationFragment_to_quizFragment"
+            android:id="@+id/selectToQuiz"
             app:destination="@id/quizFragment" />
     </fragment>
     <fragment
         android:id="@+id/quizFragment"
         android:name="jp.ac.it_college.std.s21009.whoisthatpokemon.QuizFragment"
         android:label="fragment_quiz"
-        tools:layout="@layout/fragment_quiz" />
+        tools:layout="@layout/fragment_quiz" >
+        <argument
+            android:name="pokemonIdList"
+            app:argType="integer[]" />
+    </fragment>
 </navigation>
