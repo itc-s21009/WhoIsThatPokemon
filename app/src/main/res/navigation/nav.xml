@@ -31,5 +31,36 @@
         <argument
             android:name="pokemonIdList"
             app:argType="integer[]" />
+        <action
+            android:id="@+id/quizToQuiz"
+            app:destination="@id/quizFragment" />
+        <argument
+            android:name="questionNumber"
+            app:argType="integer"
+            android:defaultValue="1" />
+        <argument
+            android:name="correctCount"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="correctAnswers"
+            app:argType="string[]" />
+        <argument android:name="selectedAnswers"
+            app:argType="string[]" />
+        <action
+            android:id="@+id/quizToResult"
+            app:destination="@id/resultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="jp.ac.it_college.std.s21009.whoisthatpokemon.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result" >
+        <argument
+            android:name="correctAnswers"
+            app:argType="string[]" />
+        <argument
+            android:name="selectedAnswers"
+            app:argType="string[]" />
     </fragment>
 </navigation>

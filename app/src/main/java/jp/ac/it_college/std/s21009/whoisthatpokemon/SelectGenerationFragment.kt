@@ -28,7 +28,9 @@ class SelectGenerationFragment : Fragment() {
             button.setOnClickListener {
                 Navigation.findNavController(it).navigate(
                     SelectGenerationFragmentDirections.selectToQuiz(
-                        g.entries.map { e -> e.pokemon_id }.toIntArray()
+                        g.entries.map { e -> e.pokemon_id }.toIntArray(),
+                        Array(10){""},
+                        Array(10){""}
                     )
                 )
             }

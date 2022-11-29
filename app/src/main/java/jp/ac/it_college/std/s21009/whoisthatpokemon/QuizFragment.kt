@@ -1,14 +1,16 @@
 package jp.ac.it_college.std.s21009.whoisthatpokemon
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -43,6 +45,7 @@ class QuizFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.tvQuestionCount.text = getString(R.string.question_count, args.questionNumber)
         val pokemonIdList = args.pokemonIdList
         val answerPokemonId = pokemonIdList[Random().nextInt(pokemonIdList.size)]
         showPokemonImage(answerPokemonId)
@@ -65,10 +68,37 @@ class QuizFragment : Fragment() {
         for (i in 0..3) {
             buttons[i].text = pokemon.filter { p -> p.id == selectedIdList[i] }[0].name
         }
-        buttons[0].setOnClickListener { Toast.makeText(activity, "正解ですーーー", Toast.LENGTH_SHORT).show() }
-        buttons[1].setOnClickListener { Toast.makeText(activity, "不正解", Toast.LENGTH_SHORT).show() }
-        buttons[2].setOnClickListener { Toast.makeText(activity, "不正解", Toast.LENGTH_SHORT).show() }
-        buttons[3].setOnClickListener { Toast.makeText(activity, "不正解", Toast.LENGTH_SHORT).show() }
+        class ClickListener(val correct: Boolean) : View.OnClickListener {
+            override fun onClick(v: View) {
+                Toast.makeText(v.context, if (correct) "正解ですーーー" else "不正解", Toast.LENGTH_SHORT)
+                    .show()
+                val selectedPokemonName = (v as Button).text.toString()
+                val correctPokemonName = buttons[0].text.toString()
+                args.selectedAnswers[args.questionNumber - 1] = selectedPokemonName
+                args.correctAnswers[args.questionNumber - 1] = correctPokemonName
+                Navigation.findNavController(v).navigate(
+                    if (args.questionNumber >= 10) {
+                        QuizFragmentDirections.quizToResult(
+                            args.selectedAnswers,
+                            args.correctAnswers
+                        )
+                    } else {
+                        QuizFragmentDirections.quizToQuiz(
+                            pokemonIdList,
+                            args.selectedAnswers,
+                            args.correctAnswers
+                        ).apply {
+                            correctCount = args.correctCount + if (correct) 1 else 0
+                            questionNumber = args.questionNumber + 1
+                        }
+                    }
+                )
+            }
+        }
+        buttons[0].setOnClickListener(ClickListener(true))
+        buttons[1].setOnClickListener(ClickListener(false))
+        buttons[2].setOnClickListener(ClickListener(false))
+        buttons[3].setOnClickListener(ClickListener(false))
     }
 
     @UiThread
