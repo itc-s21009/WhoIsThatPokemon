@@ -11,8 +11,8 @@
 
     <ImageView
         android:id="@+id/imgPokemon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
@@ -25,6 +25,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/imgResult"
         app:layout_constraintEnd_toStartOf="@+id/imgResult"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -34,26 +35,27 @@
         android:text="@string/correct_answer"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/imgPokemon"
+        app:layout_constraintEnd_toStartOf="@+id/tvYourAnswer"
         app:layout_constraintStart_toEndOf="@+id/imgPokemon"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvYourAnswerHolder"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/tvYourAnswer"
-        app:layout_constraintStart_toStartOf="@+id/tvYourAnswer"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/tvYourAnswer"
         tools:text="レックウザ"
         tools:textAlignment="center" />
 
     <TextView
         android:id="@+id/tvCorrectAnswerHolder"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/tvCorrectAnswer"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toEndOf="@+id/imgPokemon"
         app:layout_constraintTop_toBottomOf="@+id/tvCorrectAnswer"
         tools:text="レックウザ"
@@ -61,9 +63,16 @@
 
     <ImageView
         android:id="@+id/imgResult"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/mark_maru" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5013193" />
 </androidx.constraintlayout.widget.ConstraintLayout>

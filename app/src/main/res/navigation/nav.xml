@@ -60,10 +60,10 @@
         android:label="fragment_result"
         tools:layout="@layout/fragment_result" >
         <argument
-            android:name="correctAnswers"
+            android:name="selectedAnswers"
             app:argType="string[]" />
         <argument
-            android:name="selectedAnswers"
+            android:name="correctAnswers"
             app:argType="string[]" />
         <argument
             android:name="pokemonImages"
