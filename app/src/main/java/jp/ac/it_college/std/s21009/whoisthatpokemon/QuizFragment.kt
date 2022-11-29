@@ -1,5 +1,7 @@
 package jp.ac.it_college.std.s21009.whoisthatpokemon
 
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -70,23 +73,30 @@ class QuizFragment : Fragment() {
         }
         class ClickListener(val correct: Boolean) : View.OnClickListener {
             override fun onClick(v: View) {
+                if (binding.imgPokemon.drawable == null) {
+                    return
+                }
                 Toast.makeText(v.context, if (correct) "正解ですーーー" else "不正解", Toast.LENGTH_SHORT)
                     .show()
                 val selectedPokemonName = (v as Button).text.toString()
                 val correctPokemonName = buttons[0].text.toString()
                 args.selectedAnswers[args.questionNumber - 1] = selectedPokemonName
                 args.correctAnswers[args.questionNumber - 1] = correctPokemonName
+                args.pokemonImages[args.questionNumber - 1] =
+                    binding.imgPokemon.drawable.toBitmap(100, 100, Bitmap.Config.ARGB_8888)
                 Navigation.findNavController(v).navigate(
                     if (args.questionNumber >= 10) {
                         QuizFragmentDirections.quizToResult(
                             args.selectedAnswers,
-                            args.correctAnswers
+                            args.correctAnswers,
+                            args.pokemonImages
                         )
                     } else {
                         QuizFragmentDirections.quizToQuiz(
                             pokemonIdList,
                             args.selectedAnswers,
-                            args.correctAnswers
+                            args.correctAnswers,
+                            args.pokemonImages
                         ).apply {
                             correctCount = args.correctCount + if (correct) 1 else 0
                             questionNumber = args.questionNumber + 1
@@ -107,6 +117,7 @@ class QuizFragment : Fragment() {
             val info = getPokemonImage(id)
             val url = info.sprites.other.officialArtwork.frontDefault
             Picasso.get().load(url).into(binding.imgPokemon)
+            binding.imgPokemon.setColorFilter(Color.rgb(0, 0, 0))
         }
     }
 

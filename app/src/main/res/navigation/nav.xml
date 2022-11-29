@@ -50,6 +50,9 @@
         <action
             android:id="@+id/quizToResult"
             app:destination="@id/resultFragment" />
+        <argument
+            android:name="pokemonImages"
+            app:argType="android.graphics.Bitmap[]" />
     </fragment>
     <fragment
         android:id="@+id/resultFragment"
@@ -62,5 +65,8 @@
         <argument
             android:name="selectedAnswers"
             app:argType="string[]" />
+        <argument
+            android:name="pokemonImages"
+            app:argType="android.graphics.Bitmap[]" />
     </fragment>
 </navigation>
