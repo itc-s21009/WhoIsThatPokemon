@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +40,11 @@ class ResultFragment : Fragment() {
                 addItemDecoration(DividerItemDecoration(activity, orientation))
             }
             adapter = ResultAdapter(listData)
+        }
+        binding.btTitle.setOnClickListener{
+            Navigation.findNavController(it).navigate(
+                ResultFragmentDirections.resultToTitle()
+            )
         }
         return binding.root
     }

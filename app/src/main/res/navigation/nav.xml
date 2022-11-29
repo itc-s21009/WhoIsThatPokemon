@@ -68,5 +68,8 @@
         <argument
             android:name="pokemonImages"
             app:argType="android.graphics.Bitmap[]" />
+        <action
+            android:id="@+id/resultToTitle"
+            app:destination="@id/titleFragment" />
     </fragment>
 </navigation>

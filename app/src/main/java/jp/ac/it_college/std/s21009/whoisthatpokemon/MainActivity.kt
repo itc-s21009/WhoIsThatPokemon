@@ -13,4 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initJsonData(assets)
     }
+
+    override fun onBackPressed() {
+    }
 }

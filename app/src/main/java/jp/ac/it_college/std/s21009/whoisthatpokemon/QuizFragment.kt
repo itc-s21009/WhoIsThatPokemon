@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
 import androidx.core.graphics.drawable.toBitmap
@@ -76,8 +75,8 @@ class QuizFragment : Fragment() {
                 if (binding.imgPokemon.drawable == null) {
                     return
                 }
-                Toast.makeText(v.context, if (correct) "正解ですーーー" else "不正解", Toast.LENGTH_SHORT)
-                    .show()
+//                Toast.makeText(v.context, if (correct) "正解ですーーー" else "不正解", Toast.LENGTH_SHORT)
+//                    .show()
                 val selectedPokemonName = (v as Button).text.toString()
                 val correctPokemonName = buttons[0].text.toString()
                 args.selectedAnswers[args.questionNumber - 1] = selectedPokemonName
