@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">WhoIsThatPokemon</string>
-    <string name="title">ポケモンだーれだ</string>
+    <string name="title">ポケモン\nだーれだ</string>
     <string name="select_generation">世代選択</string>
     <string name="whoisthat">だーれだ？</string>
     <string name="question_count">%d問目</string>
     <string name="your_answer">あなたの回答</string>
     <string name="correct_answer">答え</string>
     <string name="to_title">タイトルに戻る</string>
+    <string name="timer">%d</string>
 </resources>
