@@ -36,5 +36,7 @@ class ResultFragment : Fragment() {
                 ResultFragmentDirections.resultToTitle()
             )
         }
+        binding.tvMode.text = getString(R.string.mode, if (args.isHard) getString(R.string.hard) else getString(R.string.easy))
+        binding.tvScore.text = getString(R.string.score, args.resultDataArray.filter { r -> r.yourAnswer == r.correctAnswer }.size)
     }
 }
