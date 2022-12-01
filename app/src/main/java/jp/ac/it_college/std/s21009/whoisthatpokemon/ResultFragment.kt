@@ -21,31 +21,20 @@ class ResultFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentResultBinding.inflate(inflater, container, false)
-        var count = 0
-        val listData = mutableListOf<ResultData>()
-        for (i in args.selectedAnswers.indices) {
-            if (args.selectedAnswers[i] == args.correctAnswers[i]) {
-                count++
-            }
-            listData.add(
-                ResultData(
-                    args.selectedAnswers[i],
-                    args.correctAnswers[i],
-                    args.pokemonImages[i]
-                )
-            )
-        }
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.rvResult.apply {
             layoutManager = LinearLayoutManager(activity).apply {
                 addItemDecoration(DividerItemDecoration(activity, orientation))
             }
-            adapter = ResultAdapter(listData)
+            adapter = ResultAdapter(args.resultDataArray.toList())
         }
         binding.btTitle.setOnClickListener{
             Navigation.findNavController(it).navigate(
                 ResultFragmentDirections.resultToTitle()
             )
         }
-        return binding.root
     }
 }

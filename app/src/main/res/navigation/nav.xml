@@ -34,17 +34,9 @@
         <action
             android:id="@+id/quizToQuiz"
             app:destination="@id/quizFragment" />
-        <argument android:name="selectedAnswers"
-            app:argType="string[]" />
-        <argument
-            android:name="correctAnswers"
-            app:argType="string[]" />
         <action
             android:id="@+id/quizToResult"
             app:destination="@id/resultFragment" />
-        <argument
-            android:name="pokemonImages"
-            app:argType="android.graphics.Bitmap[]" />
         <argument
             android:name="questionNumber"
             app:argType="integer"
@@ -53,23 +45,20 @@
             android:name="correctCount"
             app:argType="integer"
             android:defaultValue="0" />
+        <argument
+            android:name="resultDataArray"
+            app:argType="jp.ac.it_college.std.s21009.whoisthatpokemon.ResultData[]" />
     </fragment>
     <fragment
         android:id="@+id/resultFragment"
         android:name="jp.ac.it_college.std.s21009.whoisthatpokemon.ResultFragment"
         android:label="fragment_result"
         tools:layout="@layout/fragment_result" >
-        <argument
-            android:name="selectedAnswers"
-            app:argType="string[]" />
-        <argument
-            android:name="correctAnswers"
-            app:argType="string[]" />
-        <argument
-            android:name="pokemonImages"
-            app:argType="android.graphics.Bitmap[]" />
         <action
             android:id="@+id/resultToTitle"
             app:destination="@id/titleFragment" />
+        <argument
+            android:name="resultDataArray"
+            app:argType="jp.ac.it_college.std.s21009.whoisthatpokemon.ResultData[]" />
     </fragment>
 </navigation>

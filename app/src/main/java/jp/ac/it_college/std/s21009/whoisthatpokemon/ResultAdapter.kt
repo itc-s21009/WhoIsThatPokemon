@@ -1,6 +1,7 @@
 package jp.ac.it_college.std.s21009.whoisthatpokemon
 
 import android.graphics.Bitmap
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class ResultData(
     val yourAnswer: String,
     val correctAnswer: String,
     val pokemonImage: Bitmap
-)
+) : Parcelable
 
 class ResultAdapter(
     private val listData: List<ResultData>

@@ -2,7 +2,6 @@ package jp.ac.it_college.std.s21009.whoisthatpokemon
 
 import android.app.Dialog
 import android.content.DialogInterface
-import android.content.DialogInterface.OnClickListener
 import android.content.DialogInterface.OnDismissListener
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -90,9 +89,12 @@ class QuizFragment : Fragment() {
 //                    .show()
                 val selectedPokemonName = if (selected.isEmpty() && v != null) (v as Button).text.toString() else "時間切れ"
                 val correctPokemonName = buttons[0].text.toString()
-                args.selectedAnswers[args.questionNumber - 1] = selectedPokemonName
-                args.correctAnswers[args.questionNumber - 1] = correctPokemonName
-                args.pokemonImages[args.questionNumber - 1] = binding.imgPokemon.drawable.toBitmap(100, 100, Bitmap.Config.ARGB_8888)
+                val correctPokemonImage = binding.imgPokemon.drawable.toBitmap(100, 100, Bitmap.Config.ARGB_8888)
+                args.resultDataArray[args.questionNumber - 1] = ResultData(
+                    selectedPokemonName,
+                    correctPokemonName,
+                    correctPokemonImage
+                )
                 val greats = listOf(
                     getString(R.string.great_1),
                     getString(R.string.great_2),
@@ -113,16 +115,12 @@ class QuizFragment : Fragment() {
                     Navigation.findNavController(view).navigate(
                         if (args.questionNumber >= 10) {
                             QuizFragmentDirections.quizToResult(
-                                args.selectedAnswers,
-                                args.correctAnswers,
-                                args.pokemonImages
+                                args.resultDataArray
                             )
                         } else {
                             QuizFragmentDirections.quizToQuiz(
                                 pokemonIdList,
-                                args.selectedAnswers,
-                                args.correctAnswers,
-                                args.pokemonImages
+                                args.resultDataArray
                             ).apply {
                                 correctCount =
                                     args.correctCount + if (selectedPokemonName == correctPokemonName) 1 else 0

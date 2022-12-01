@@ -1,7 +1,5 @@
 package jp.ac.it_college.std.s21009.whoisthatpokemon
 
-import android.graphics.Bitmap.Config
-import android.graphics.Bitmap.createBitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,9 +29,7 @@ class SelectGenerationFragment : Fragment() {
                 Navigation.findNavController(it).navigate(
                     SelectGenerationFragmentDirections.selectToQuiz(
                         g.entries.map { e -> e.pokemon_id }.toIntArray(),
-                        Array(10){""},
-                        Array(10){""},
-                        Array(10){ createBitmap(1, 1, Config.ARGB_8888) }
+                        arrayOfNulls(10)
                     )
                 )
             }
