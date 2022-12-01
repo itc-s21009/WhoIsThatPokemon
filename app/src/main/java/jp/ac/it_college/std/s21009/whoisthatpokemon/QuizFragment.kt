@@ -58,27 +58,12 @@ class QuizFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.tvQuestionCount.text = getString(R.string.question_count, args.questionNumber)
         val pokemonIdList = args.pokemonIdList
-        val answerPokemonId = pokemonIdList[Random().nextInt(pokemonIdList.size)]
-        showPokemonImage(answerPokemonId)
         val buttons = listOf(
             binding.answer1,
             binding.answer2,
             binding.answer3,
             binding.answer4,
         ).shuffled()
-        val selectedIdList = mutableListOf<Int>()
-        selectedIdList.add(answerPokemonId)
-        var i = 0
-        while (i < 3) {
-            val selectedId = pokemonIdList[Random().nextInt(pokemonIdList.size)]
-            if (!selectedIdList.contains(selectedId)) {
-                selectedIdList.add(selectedId)
-                i++
-            }
-        }
-        for (i in 0..3) {
-            buttons[i].text = pokemon.filter { p -> p.id == selectedIdList[i] }[0].name
-        }
         var moved = false
         class ClickListener(val selected: String = "") : View.OnClickListener {
             override fun onClick(v: View?) {
@@ -122,21 +107,31 @@ class QuizFragment : Fragment() {
                                 pokemonIdList,
                                 args.resultDataArray
                             ).apply {
-                                correctCount =
-                                    args.correctCount + if (selectedPokemonName == correctPokemonName) 1 else 0
+                                correctCount = args.correctCount + if (selectedPokemonName == correctPokemonName) 1 else 0
                                 questionNumber = args.questionNumber + 1
                             }
                         }
                     )
                 }.show(parentFragmentManager, "dialog_answer")
-                
                 moved = true
             }
         }
-        buttons[0].setOnClickListener(ClickListener())
-        buttons[1].setOnClickListener(ClickListener())
-        buttons[2].setOnClickListener(ClickListener())
-        buttons[3].setOnClickListener(ClickListener())
+        val selectedIdList = mutableListOf<Int>()
+        var i = 0
+        while (i < 4) {
+            val selectedId = pokemonIdList[Random().nextInt(pokemonIdList.size)]
+            if (!selectedIdList.contains(selectedId)) {
+                selectedIdList.add(selectedId)
+                buttons[i].apply {
+                    text = pokemon.filter { p -> p.id == selectedId }[0].name
+                    setOnClickListener(ClickListener())
+                }
+                if (i == 0) {
+                    showPokemonImage(selectedId)
+                }
+                i++
+            }
+        }
         val h = Handler(Looper.getMainLooper())
         h.postDelayed(object : Runnable {
             var time = 10
