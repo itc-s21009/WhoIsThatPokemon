@@ -11,7 +11,7 @@
         android:label="fragment_title"
         tools:layout="@layout/fragment_title" >
         <action
-            android:id="@+id/action_titleFragment_to_selectGenerationFragment"
+            android:id="@+id/titleToSelect"
             app:destination="@id/selectGenerationFragment" />
     </fragment>
     <fragment
@@ -22,6 +22,9 @@
         <action
             android:id="@+id/selectToQuiz"
             app:destination="@id/quizFragment" />
+        <argument
+            android:name="isHard"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/quizFragment"
@@ -48,6 +51,9 @@
         <argument
             android:name="resultDataArray"
             app:argType="jp.ac.it_college.std.s21009.whoisthatpokemon.ResultData[]" />
+        <argument
+            android:name="isHard"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/resultFragment"
@@ -60,5 +66,8 @@
         <argument
             android:name="resultDataArray"
             app:argType="jp.ac.it_college.std.s21009.whoisthatpokemon.ResultData[]" />
+        <argument
+            android:name="isHard"
+            app:argType="boolean" />
     </fragment>
 </navigation>

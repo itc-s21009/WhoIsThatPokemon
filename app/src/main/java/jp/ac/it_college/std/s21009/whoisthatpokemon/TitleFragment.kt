@@ -22,8 +22,15 @@ class TitleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btSelectGeneration.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.selectGenerationFragment)
+        binding.btEasy.setOnClickListener {
+            Navigation.findNavController(it).navigate(
+                TitleFragmentDirections.titleToSelect(false)
+            )
+        }
+        binding.btHard.setOnClickListener {
+            Navigation.findNavController(it).navigate(
+                TitleFragmentDirections.titleToSelect(true)
+            )
         }
     }
 }

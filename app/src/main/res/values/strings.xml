@@ -17,4 +17,10 @@
     <string name="great_3">ナイス！</string>
     <string name="great_4">あっぱれ！</string>
     <string name="great_5">やった！</string>
+    <string name="easy">イージー</string>
+    <string name="hard">ハード</string>
+    <string name="answer">回答</string>
+    <string name="input_pokemon">ポケモンの名前を入力</string>
+    <string name="mode">%sモード</string>
+    <string name="score">スコア：%d/10</string>
 </resources>

@@ -12,7 +12,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AlertDialog
@@ -67,12 +66,12 @@ class QuizFragment : Fragment() {
         var moved = false
         class ClickListener(val selected: String = "") : View.OnClickListener {
             override fun onClick(v: View?) {
-                if (binding.imgPokemon.drawable == null) {
+                if (binding.imgPokemon.drawable == null || moved) {
                     return
                 }
 //                Toast.makeText(v.context, if (correct) "正解ですーーー" else "不正解", Toast.LENGTH_SHORT)
 //                    .show()
-                val selectedPokemonName = if (selected.isEmpty() && v != null) (v as Button).text.toString() else "時間切れ"
+                val selectedPokemonName = selected.ifEmpty { "時間切れ" }
                 val correctPokemonName = buttons[0].text.toString()
                 val correctPokemonImage = binding.imgPokemon.drawable.toBitmap(100, 100, Bitmap.Config.ARGB_8888)
                 args.resultDataArray[args.questionNumber - 1] = ResultData(
@@ -100,12 +99,14 @@ class QuizFragment : Fragment() {
                     Navigation.findNavController(view).navigate(
                         if (args.questionNumber >= 10) {
                             QuizFragmentDirections.quizToResult(
-                                args.resultDataArray
+                                args.resultDataArray,
+                                args.isHard
                             )
                         } else {
                             QuizFragmentDirections.quizToQuiz(
                                 pokemonIdList,
-                                args.resultDataArray
+                                args.resultDataArray,
+                                args.isHard
                             ).apply {
                                 correctCount = args.correctCount + if (selectedPokemonName == correctPokemonName) 1 else 0
                                 questionNumber = args.questionNumber + 1
@@ -123,8 +124,13 @@ class QuizFragment : Fragment() {
             if (!selectedIdList.contains(selectedId)) {
                 selectedIdList.add(selectedId)
                 buttons[i].apply {
-                    text = pokemon.filter { p -> p.id == selectedId }[0].name
-                    setOnClickListener(ClickListener())
+                    try {
+                        text = pokemon.filter { p -> p.id == selectedId }[0].name
+                    } catch (e: IndexOutOfBoundsException) {
+                        println("Pokemon not found: $selectedId")
+                        e.printStackTrace()
+                    }
+                    setOnClickListener(ClickListener(this.text.toString()))
                 }
                 if (i == 0) {
                     showPokemonImage(selectedId)
@@ -132,9 +138,25 @@ class QuizFragment : Fragment() {
                 i++
             }
         }
+        binding.btAnswer.setOnClickListener{
+            val answer = binding.etAnswer.text.toString()
+            if (answer.isEmpty()) {
+                return@setOnClickListener
+            }
+            ClickListener(answer).onClick(null)
+        }
+        if (args.isHard) {
+            binding.answer1.visibility = View.INVISIBLE
+            binding.answer2.visibility = View.INVISIBLE
+            binding.answer3.visibility = View.INVISIBLE
+            binding.answer4.visibility = View.INVISIBLE
+        } else {
+            binding.etAnswer.visibility = View.INVISIBLE
+            binding.btAnswer.visibility = View.INVISIBLE
+        }
         val h = Handler(Looper.getMainLooper())
         h.postDelayed(object : Runnable {
-            var time = 10
+            var time = if (args.isHard) 45 else 10
             override fun run() {
                 if (moved) {
                     return
