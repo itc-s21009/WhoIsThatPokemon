@@ -1,7 +1,12 @@
 package jp.ac.it_college.std.s21009.whoisthatpokemon
 
+import android.app.Dialog
+import android.content.DialogInterface
+import android.content.DialogInterface.OnClickListener
+import android.content.DialogInterface.OnDismissListener
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,7 +16,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -84,27 +92,46 @@ class QuizFragment : Fragment() {
                 val correctPokemonName = buttons[0].text.toString()
                 args.selectedAnswers[args.questionNumber - 1] = selectedPokemonName
                 args.correctAnswers[args.questionNumber - 1] = correctPokemonName
-                args.pokemonImages[args.questionNumber - 1] =
-                    binding.imgPokemon.drawable.toBitmap(100, 100, Bitmap.Config.ARGB_8888)
-                Navigation.findNavController(view).navigate(
-                    if (args.questionNumber >= 10) {
-                        QuizFragmentDirections.quizToResult(
-                            args.selectedAnswers,
-                            args.correctAnswers,
-                            args.pokemonImages
-                        )
-                    } else {
-                        QuizFragmentDirections.quizToQuiz(
-                            pokemonIdList,
-                            args.selectedAnswers,
-                            args.correctAnswers,
-                            args.pokemonImages
-                        ).apply {
-                            correctCount = args.correctCount + if (selectedPokemonName == correctPokemonName) 1 else 0
-                            questionNumber = args.questionNumber + 1
-                        }
-                    }
+                args.pokemonImages[args.questionNumber - 1] = binding.imgPokemon.drawable.toBitmap(100, 100, Bitmap.Config.ARGB_8888)
+                val greats = listOf(
+                    getString(R.string.great_1),
+                    getString(R.string.great_2),
+                    getString(R.string.great_3),
+                    getString(R.string.great_4),
+                    getString(R.string.great_5)
                 )
+                val resO = ResourcesCompat.getDrawable(resources, R.drawable.mark_maru, null)
+                val resX = ResourcesCompat.getDrawable(resources, R.drawable.mark_batsu, null)
+                AnswerDialog(
+                    if (selectedPokemonName == correctPokemonName)
+                        getString(R.string.correct) else getString(R.string.incorrect),
+                    if (selectedPokemonName == correctPokemonName)
+                        greats.random() else getString(R.string.answer_is, correctPokemonName),
+                    if (selectedPokemonName == correctPokemonName)
+                        resO!! else resX!!
+                ) {
+                    Navigation.findNavController(view).navigate(
+                        if (args.questionNumber >= 10) {
+                            QuizFragmentDirections.quizToResult(
+                                args.selectedAnswers,
+                                args.correctAnswers,
+                                args.pokemonImages
+                            )
+                        } else {
+                            QuizFragmentDirections.quizToQuiz(
+                                pokemonIdList,
+                                args.selectedAnswers,
+                                args.correctAnswers,
+                                args.pokemonImages
+                            ).apply {
+                                correctCount =
+                                    args.correctCount + if (selectedPokemonName == correctPokemonName) 1 else 0
+                                questionNumber = args.questionNumber + 1
+                            }
+                        }
+                    )
+                }.show(parentFragmentManager, "dialog_answer")
+                
                 moved = true
             }
         }
@@ -155,6 +182,27 @@ class QuizFragment : Fragment() {
     interface PokemonService {
         @GET("pokemon/{id}/")
         fun fetchPokemon(@Path("id") id: Int): Call<PokemonImageInfo>
+    }
+
+    class AnswerDialog(
+        private val title: String,
+        private val content: String,
+        private val icon: Drawable,
+        private val listener: OnDismissListener
+        ) : DialogFragment() {
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            return requireActivity().let {
+                AlertDialog.Builder(it).apply {
+                    setTitle(title)
+                    setMessage(content)
+                    setIcon(icon)
+                    setPositiveButton(getString(R.string.to_next)) { _, _ -> }
+                }
+            }.create()
+        }
+
+        override fun onDismiss(dialog: DialogInterface) {listener.onDismiss(dialog)}
+
     }
 
 }
