@@ -3,6 +3,8 @@ package jp.ac.it_college.std.s21009.whoisthatpokemon
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,20 +72,21 @@ class QuizFragment : Fragment() {
         for (i in 0..3) {
             buttons[i].text = pokemon.filter { p -> p.id == selectedIdList[i] }[0].name
         }
-        class ClickListener(val correct: Boolean) : View.OnClickListener {
-            override fun onClick(v: View) {
+        var moved = false
+        class ClickListener(val selected: String = "") : View.OnClickListener {
+            override fun onClick(v: View?) {
                 if (binding.imgPokemon.drawable == null) {
                     return
                 }
 //                Toast.makeText(v.context, if (correct) "正解ですーーー" else "不正解", Toast.LENGTH_SHORT)
 //                    .show()
-                val selectedPokemonName = (v as Button).text.toString()
+                val selectedPokemonName = if (selected.isEmpty() && v != null) (v as Button).text.toString() else "時間切れ"
                 val correctPokemonName = buttons[0].text.toString()
                 args.selectedAnswers[args.questionNumber - 1] = selectedPokemonName
                 args.correctAnswers[args.questionNumber - 1] = correctPokemonName
                 args.pokemonImages[args.questionNumber - 1] =
                     binding.imgPokemon.drawable.toBitmap(100, 100, Bitmap.Config.ARGB_8888)
-                Navigation.findNavController(v).navigate(
+                Navigation.findNavController(view).navigate(
                     if (args.questionNumber >= 10) {
                         QuizFragmentDirections.quizToResult(
                             args.selectedAnswers,
@@ -97,17 +100,34 @@ class QuizFragment : Fragment() {
                             args.correctAnswers,
                             args.pokemonImages
                         ).apply {
-                            correctCount = args.correctCount + if (correct) 1 else 0
+                            correctCount = args.correctCount + if (selectedPokemonName == correctPokemonName) 1 else 0
                             questionNumber = args.questionNumber + 1
                         }
                     }
                 )
+                moved = true
             }
         }
-        buttons[0].setOnClickListener(ClickListener(true))
-        buttons[1].setOnClickListener(ClickListener(false))
-        buttons[2].setOnClickListener(ClickListener(false))
-        buttons[3].setOnClickListener(ClickListener(false))
+        buttons[0].setOnClickListener(ClickListener())
+        buttons[1].setOnClickListener(ClickListener())
+        buttons[2].setOnClickListener(ClickListener())
+        buttons[3].setOnClickListener(ClickListener())
+        val h = Handler(Looper.getMainLooper())
+        h.postDelayed(object : Runnable {
+            var time = 10
+            override fun run() {
+                if (moved) {
+                    return
+                }
+                if (time <= 0) {
+                    ClickListener().onClick(null)
+                    return
+                }
+                binding.tvTimer.text = getString(R.string.timer, time)
+                time -= 1
+                h.postDelayed(this, 1000L)
+            }
+        }, 0L)
     }
 
     @UiThread
