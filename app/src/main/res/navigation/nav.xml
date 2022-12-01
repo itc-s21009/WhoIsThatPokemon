@@ -34,6 +34,17 @@
         <action
             android:id="@+id/quizToQuiz"
             app:destination="@id/quizFragment" />
+        <argument android:name="selectedAnswers"
+            app:argType="string[]" />
+        <argument
+            android:name="correctAnswers"
+            app:argType="string[]" />
+        <action
+            android:id="@+id/quizToResult"
+            app:destination="@id/resultFragment" />
+        <argument
+            android:name="pokemonImages"
+            app:argType="android.graphics.Bitmap[]" />
         <argument
             android:name="questionNumber"
             app:argType="integer"
@@ -42,17 +53,6 @@
             android:name="correctCount"
             app:argType="integer"
             android:defaultValue="0" />
-        <argument
-            android:name="correctAnswers"
-            app:argType="string[]" />
-        <argument android:name="selectedAnswers"
-            app:argType="string[]" />
-        <action
-            android:id="@+id/quizToResult"
-            app:destination="@id/resultFragment" />
-        <argument
-            android:name="pokemonImages"
-            app:argType="android.graphics.Bitmap[]" />
     </fragment>
     <fragment
         android:id="@+id/resultFragment"
