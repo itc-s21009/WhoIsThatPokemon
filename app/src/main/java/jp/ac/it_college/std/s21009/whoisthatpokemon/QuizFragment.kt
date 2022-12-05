@@ -54,11 +54,13 @@ class QuizFragment : Fragment() {
             binding.answer4,
         ).shuffled()
 
+        var pressed = false
         class ClickListener(val selected: String = "") : View.OnClickListener {
             override fun onClick(v: View?) {
-                if (binding.imgPokemon.drawable == null) {
+                if (binding.imgPokemon.drawable == null || pressed) {
                     return
                 }
+                pressed = true
 //                Toast.makeText(v.context, if (correct) "正解ですーーー" else "不正解", Toast.LENGTH_SHORT)
 //                    .show()
                 val selectedPokemonName = selected.ifEmpty { "時間切れ" }
