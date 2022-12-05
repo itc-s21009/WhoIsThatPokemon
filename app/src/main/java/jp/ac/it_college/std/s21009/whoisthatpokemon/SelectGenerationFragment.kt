@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import jp.ac.it_college.std.s21009.whoisthatpokemon.databinding.FragmentSelectGenerationBinding
 
 class SelectGenerationFragment : Fragment() {
@@ -25,18 +25,11 @@ class SelectGenerationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pokedex.forEach { g ->
-            val button = Button(activity).apply { text = g.name }
-            button.setOnClickListener {
-                Navigation.findNavController(it).navigate(
-                    SelectGenerationFragmentDirections.selectToQuiz(
-                        g.entries.map { e -> e.pokemon_id }.toIntArray(),
-                        arrayOfNulls(10),
-                        args.isHard
-                    )
-                )
-            }
-            binding.generations.addView(button)
+        binding.rvGenerations.apply {
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            adapter = GenerationAdapter(pokedex, args)
         }
+        binding.tvMode.text = getString(R.string.mode, if (args.isHard) getString(R.string.hard) else getString(R.string.easy))
     }
 }
