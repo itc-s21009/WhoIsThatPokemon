@@ -25,6 +25,9 @@
         <argument
             android:name="isHard"
             app:argType="boolean" />
+        <action
+            android:id="@+id/selectToTitle"
+            app:destination="@id/titleFragment" />
     </fragment>
     <fragment
         android:id="@+id/quizFragment"
@@ -54,6 +57,9 @@
         <argument
             android:name="isHard"
             app:argType="boolean" />
+        <action
+            android:id="@+id/quizToTitle"
+            app:destination="@id/titleFragment" />
     </fragment>
     <fragment
         android:id="@+id/resultFragment"

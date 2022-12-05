@@ -1,7 +1,9 @@
 package jp.ac.it_college.std.s21009.whoisthatpokemon
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import jp.ac.it_college.std.s21009.whoisthatpokemon.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -12,8 +14,17 @@ class MainActivity : AppCompatActivity() {
         title = getString(R.string.app_name)
         setContentView(binding.root)
         initJsonData(assets)
+        onBackPressedDispatcher.addCallback(this) {
+            val controller = binding.fragmentContainerView.findNavController()
+            when (controller.currentDestination?.id) {
+                R.id.selectGenerationFragment -> controller.navigate(
+                    SelectGenerationFragmentDirections.selectToTitle()
+                )
+                R.id.quizFragment -> controller.navigate(
+                    QuizFragmentDirections.quizToTitle()
+                )
+            }
+        }
     }
 
-    override fun onBackPressed() {
-    }
 }

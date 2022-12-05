@@ -20,6 +20,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
 import jp.ac.it_college.std.s21009.whoisthatpokemon.databinding.FragmentQuizBinding
@@ -31,7 +32,8 @@ class QuizFragment : Fragment() {
     private val binding get() = _binding!!
     private val args: QuizFragmentArgs by navArgs()
 
-    private val IMG_URL_FORMAT = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png"
+    private val IMG_URL_FORMAT =
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,17 +53,18 @@ class QuizFragment : Fragment() {
             binding.answer3,
             binding.answer4,
         ).shuffled()
-        var moved = false
+
         class ClickListener(val selected: String = "") : View.OnClickListener {
             override fun onClick(v: View?) {
-                if (binding.imgPokemon.drawable == null || moved) {
+                if (binding.imgPokemon.drawable == null) {
                     return
                 }
 //                Toast.makeText(v.context, if (correct) "正解ですーーー" else "不正解", Toast.LENGTH_SHORT)
 //                    .show()
                 val selectedPokemonName = selected.ifEmpty { "時間切れ" }
                 val correctPokemonName = buttons[0].text.toString()
-                val correctPokemonImage = binding.imgPokemon.drawable.toBitmap(100, 100, Bitmap.Config.ARGB_8888)
+                val correctPokemonImage =
+                    binding.imgPokemon.drawable.toBitmap(100, 100, Bitmap.Config.ARGB_8888)
                 args.resultDataArray[args.questionNumber - 1] = ResultData(
                     selectedPokemonName,
                     correctPokemonName,
@@ -96,15 +99,16 @@ class QuizFragment : Fragment() {
                                 args.resultDataArray,
                                 args.isHard
                             ).apply {
-                                correctCount = args.correctCount + if (selectedPokemonName == correctPokemonName) 1 else 0
+                                correctCount =
+                                    args.correctCount + if (selectedPokemonName == correctPokemonName) 1 else 0
                                 questionNumber = args.questionNumber + 1
                             }
                         }
                     )
                 }.show(parentFragmentManager, "dialog_answer")
-                moved = true
             }
         }
+
         val selectedIdList = mutableListOf<Int>()
         var i = 0
         while (i < 4) {
@@ -126,7 +130,7 @@ class QuizFragment : Fragment() {
                 i++
             }
         }
-        binding.btAnswer.setOnClickListener{
+        binding.btAnswer.setOnClickListener {
             val answer = binding.etAnswer.text.toString()
             if (answer.isEmpty()) {
                 return@setOnClickListener
@@ -146,7 +150,9 @@ class QuizFragment : Fragment() {
         h.postDelayed(object : Runnable {
             var time = if (args.isHard) 45 else 10
             override fun run() {
-                if (moved) {
+                try { // 別のFragmentに移動している場合
+                    view.findNavController()
+                } catch (e: IllegalStateException) {
                     return
                 }
                 if (time <= 0) {
@@ -174,7 +180,7 @@ class QuizFragment : Fragment() {
         private val content: String,
         private val icon: Drawable,
         private val listener: OnDismissListener
-        ) : DialogFragment() {
+    ) : DialogFragment() {
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return requireActivity().let {
                 AlertDialog.Builder(it).apply {
@@ -186,7 +192,9 @@ class QuizFragment : Fragment() {
             }.create()
         }
 
-        override fun onDismiss(dialog: DialogInterface) {listener.onDismiss(dialog)}
+        override fun onDismiss(dialog: DialogInterface) {
+            listener.onDismiss(dialog)
+        }
 
     }
 
