@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
-import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -22,19 +21,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.squareup.picasso.Picasso
 import jp.ac.it_college.std.s21009.whoisthatpokemon.databinding.FragmentQuizBinding
-import jp.ac.it_college.std.s21009.whoisthatpokemon.model.PokemonImageInfo
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
 import java.util.*
 
 class QuizFragment : Fragment() {
@@ -42,8 +31,7 @@ class QuizFragment : Fragment() {
     private val binding get() = _binding!!
     private val args: QuizFragmentArgs by navArgs()
 
-    private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-    private val BASE_URL = "https://pokeapi.co/api/v2/"
+    private val IMG_URL_FORMAT = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -175,28 +163,10 @@ class QuizFragment : Fragment() {
     @UiThread
     private fun showPokemonImage(id: Int) {
         lifecycleScope.launch {
-            val info = getPokemonImage(id)
-            val url = info.sprites.other.officialArtwork.frontDefault
+            val url = IMG_URL_FORMAT.format(id)
             Picasso.get().load(url).into(binding.imgPokemon)
             binding.imgPokemon.setColorFilter(Color.rgb(0, 0, 0))
         }
-    }
-
-    @WorkerThread
-    private suspend fun getPokemonImage(id: Int): PokemonImageInfo {
-        return withContext(Dispatchers.IO) {
-            val retrofit = Retrofit.Builder().apply {
-                baseUrl(BASE_URL)
-                addConverterFactory(MoshiConverterFactory.create(moshi))
-            }.build()
-            val service = retrofit.create(PokemonService::class.java)
-            service.fetchPokemon(id).execute().body() ?: throw IllegalStateException("ポケモンが見つかりません")
-        }
-    }
-
-    interface PokemonService {
-        @GET("pokemon/{id}/")
-        fun fetchPokemon(@Path("id") id: Int): Call<PokemonImageInfo>
     }
 
     class AnswerDialog(
