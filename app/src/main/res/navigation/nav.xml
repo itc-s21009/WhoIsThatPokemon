@@ -35,7 +35,7 @@
         android:label="fragment_quiz"
         tools:layout="@layout/fragment_quiz" >
         <argument
-            android:name="pokemonIdList"
+            android:name="pokemonIdArray"
             app:argType="integer[]" />
         <action
             android:id="@+id/quizToQuiz"

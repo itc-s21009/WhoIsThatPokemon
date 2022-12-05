@@ -46,7 +46,7 @@ class QuizFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.tvQuestionCount.text = getString(R.string.question_count, args.questionNumber)
-        val pokemonIdList = args.pokemonIdList
+        val pokemonIdList = args.pokemonIdArray.toMutableList()
         val buttons = listOf(
             binding.answer1,
             binding.answer2,
@@ -95,7 +95,7 @@ class QuizFragment : Fragment() {
                             )
                         } else {
                             QuizFragmentDirections.quizToQuiz(
-                                pokemonIdList,
+                                pokemonIdList.toIntArray(),
                                 args.resultDataArray,
                                 args.isHard
                             ).apply {
@@ -127,6 +127,7 @@ class QuizFragment : Fragment() {
                 if (i == 0) {
                     showPokemonImage(selectedId)
                 }
+                pokemonIdList.remove(selectedId)
                 i++
             }
         }
